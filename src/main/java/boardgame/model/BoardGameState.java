@@ -2,6 +2,7 @@ package boardgame.model;
 
 import puzzle.TwoPhaseMoveState;
 
+import java.util.List;
 import java.util.Set;
 
 public class BoardGameState implements TwoPhaseMoveState<Position> {
@@ -44,8 +45,47 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         return figure1.getPosition().equals(position) || figure2.getPosition().equals(position);
     }
 
+    private Position getNewPosition(Position from, Direction direction, int steps) {
+        int newRow = from.row() + direction.getRow() * steps;
+        int newColumn = from.column() + direction.getColumn() * steps;
+        return new Position(newRow, newColumn);
+    }
+
+    private boolean isValidPosition(Position position){
+        return position.row() >= 0 && position.column() >= 0 && position.column() <= 7 && position.row() <= 7;
+    }
+
+    private Direction getOtherFiguresLastMove(Position from){
+        if (from.equals(figure1.getPosition())){
+            return figure2.getLastMove();
+        } else {
+            return figure1.getLastMove();
+        }
+    }
+
+    private List<Direction> getLegalDirections(Position from){
+        Direction otherFiguresLastMove = getOtherFiguresLastMove(from);
+
+        if (otherFiguresLastMove.equals(Direction.UP) || otherFiguresLastMove.equals(Direction.DOWN)) {
+            return List.of(Direction.LEFT, Direction.RIGHT);
+        } else if (otherFiguresLastMove.equals(Direction.RIGHT) || otherFiguresLastMove.equals(Direction.LEFT)) {
+            return List.of(Direction.UP, Direction.DOWN);
+        } else {
+            return List.of(Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT);
+        }
+    }
+
     @Override
     public boolean isLegalMove(TwoPhaseMove<Position> positionTwoPhaseMove) {
+        if (isValidPosition(positionTwoPhaseMove.to())){
+            var from = positionTwoPhaseMove.from();
+            var legalDirections = getLegalDirections(from);
+            for (Direction direction : legalDirections) {
+                if (getNewPosition(from, direction, table[from.row()][from.column()]).equals(positionTwoPhaseMove.to())){
+                    return true;
+                }
+            }
+        }
         return false;
     }
 
