@@ -111,8 +111,32 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         return false;
     }
 
+    private Direction getDirectionFromPositionChange(Position from, Position to) {
+        if (from.column()-to.column() == 0){
+            if (from.row()-to.row() == 0) {
+                return Direction.NONE;
+            } else if (from.row()-to.row() > 0){
+                return Direction.UP;
+            } else {
+                return Direction.DOWN;
+            }
+        } else if (from.column()-to.column() > 0) {
+            return Direction.LEFT;
+        } else {
+            return Direction.RIGHT;
+        }
+    }
+
     @Override
     public void makeMove(TwoPhaseMove<Position> positionTwoPhaseMove) {
-
+        if (positionTwoPhaseMove.from().equals(figure1.getPosition())){
+            figure1.setPosition(positionTwoPhaseMove.to());
+            figure1.setLastMove(getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
+            figure2.setLastMove(Direction.NONE);
+        } else {
+            figure2.setPosition(positionTwoPhaseMove.to());
+            figure2.setLastMove(getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
+            figure1.setLastMove(Direction.NONE);
+        }
     }
 }
