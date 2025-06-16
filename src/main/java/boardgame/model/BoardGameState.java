@@ -58,8 +58,15 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
     }
 
     @Override
-    public TwoPhaseMoveState<Position> clone() {
-        return null;
+    public BoardGameState clone() {
+        BoardGameState copy = new BoardGameState();
+        copy.figure1 = new Figure();
+        copy.figure1.setPosition(this.figure1.getPosition());
+        copy.figure1.setLastMove(this.figure1.getLastMove());
+        copy.figure2 = new Figure();
+        copy.figure2.setPosition(this.figure2.getPosition());
+        copy.figure2.setLastMove(this.figure2.getLastMove());
+        return copy;
     }
 
     @Override
