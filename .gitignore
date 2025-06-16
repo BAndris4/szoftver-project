@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/intellij+all,netbeans,eclipse,maven
 # Edit at https://www.toptal.com/developers/gitignore?templates=intellij+all,netbeans,eclipse,maven
 
+# Prevent accidentally committing Maven credentials or config
+settings.xml
+.m2/
+
 ### Eclipse ###
 .metadata
 bin/
