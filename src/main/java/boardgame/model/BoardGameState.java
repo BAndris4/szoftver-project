@@ -2,6 +2,7 @@ package boardgame.model;
 
 import puzzle.TwoPhaseMoveState;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -30,9 +31,30 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         return figure1.getPosition().equals(new Position(7,7)) && figure2.getPosition().equals(new Position(7,7));
     }
 
+    public static List<Direction> getMovableDirections() {
+        return List.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
+    }
+
     @Override
     public Set<TwoPhaseMove<Position>> getLegalMoves() {
-        return Set.of();
+        var moves = new HashSet<TwoPhaseMove<Position>>();
+
+        var currentPosition = figure1.getPosition();
+        for (Direction direction : getMovableDirections()) {
+            var move = new TwoPhaseMove<Position>(currentPosition, getNewPosition(currentPosition, direction, table[currentPosition.row()][currentPosition.column()]));
+            if (isLegalMove(move)) {
+                moves.add(move);
+            }
+        }
+
+        currentPosition = figure2.getPosition();
+        for (Direction direction : getMovableDirections()) {
+            var move = new TwoPhaseMove<Position>(currentPosition, getNewPosition(currentPosition, direction, table[currentPosition.row()][currentPosition.column()]));
+            if (isLegalMove(move)) {
+                moves.add(move);
+            }
+        }
+        return moves;
     }
 
     @Override
