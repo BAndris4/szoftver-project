@@ -41,7 +41,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
 
     @Override
     public boolean isLegalToMoveFrom(Position position) {
-        return false;
+        return figure1.getPosition().equals(position) || figure2.getPosition().equals(position);
     }
 
     @Override
