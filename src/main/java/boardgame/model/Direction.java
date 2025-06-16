@@ -24,10 +24,18 @@ public enum Direction {
         this.column = column;
     }
 
+    /**
+     * Gets the row offset indicating the vertical movement of this direction.
+     * @return the row offset of this direction
+     */
     public int getRow() {
         return row;
     }
 
+    /**
+     * Gets the column offset indicating the horizontal movement of this direction.
+     * @return the column offset of this direction
+     */
     public int getColumn() {
         return column;
     }
