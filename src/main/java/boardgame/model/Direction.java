@@ -42,6 +42,14 @@ public enum Direction {
         return column;
     }
 
+    /**
+     * Returns a list of all directions that represent actual movement on the board,
+     * excluding the {@link #NONE} direction.
+     * <p>
+     * These directions are: {@link #UP}, {@link #DOWN}, {@link #LEFT}, and {@link #RIGHT}.
+     *
+     * @return a list of movement-related directions
+     */
     public static List<Direction> getMovableDirections() {
         return List.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
     }
