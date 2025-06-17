@@ -4,6 +4,7 @@ import puzzle.TwoPhaseMoveState;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 public class BoardGameState implements TwoPhaseMoveState<Position> {
@@ -71,7 +72,8 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
 
     @Override
     public boolean isLegalToMoveFrom(Position position) {
-        return figure1.getPosition().equals(position) || figure2.getPosition().equals(position);
+        return (figure1.getPosition().equals(position) && figure1.getLastMove().equals(Direction.NONE)) ||
+                (figure2.getPosition().equals(position) && figure2.getLastMove().equals(Direction.NONE));
     }
 
     private Position getNewPosition(Position from, Direction direction, int steps) {
@@ -106,7 +108,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
 
     @Override
     public boolean isLegalMove(TwoPhaseMove<Position> positionTwoPhaseMove) {
-        if (isValidPosition(positionTwoPhaseMove.to())){
+        if (isValidPosition(positionTwoPhaseMove.to()) && isLegalToMoveFrom(positionTwoPhaseMove.from())){
             var from = positionTwoPhaseMove.from();
             var legalDirections = getLegalDirections(from);
             for (Direction direction : legalDirections) {
@@ -139,11 +141,35 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         if (positionTwoPhaseMove.from().equals(figure1.getPosition())){
             figure1.setPosition(positionTwoPhaseMove.to());
             figure1.setLastMove(getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
-            figure2.setLastMove(Direction.NONE);
         } else {
             figure2.setPosition(positionTwoPhaseMove.to());
             figure2.setLastMove(getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
-            figure1.setLastMove(Direction.NONE);
         }
+        if (!(figure1.getLastMove().equals(Direction.NONE)) && !(figure2.getLastMove().equals(Direction.NONE))){
+            figure1.setLastMove(Direction.NONE);
+            figure2.setLastMove(Direction.NONE);
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BoardGameState that = (BoardGameState) o;
+        return Objects.equals(figure1, that.figure1) && Objects.equals(figure2, that.figure2);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("BoardGameState{");
+        sb.append("figure1=").append(figure1);
+        sb.append(", figure2=").append(figure2);
+        sb.append('}');
+        return sb.toString();
     }
 }
