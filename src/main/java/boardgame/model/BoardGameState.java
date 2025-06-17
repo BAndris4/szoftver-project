@@ -76,17 +76,17 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
                 (figure2.getPosition().equals(position) && figure2.getLastMove().equals(Direction.NONE));
     }
 
-    private Position getNewPosition(Position from, Direction direction, int steps) {
+    public Position getNewPosition(Position from, Direction direction, int steps) {
         int newRow = from.row() + direction.getRow() * steps;
         int newColumn = from.column() + direction.getColumn() * steps;
         return new Position(newRow, newColumn);
     }
 
-    private boolean isValidPosition(Position position){
+    public boolean isValidPosition(Position position){
         return position.row() >= 0 && position.column() >= 0 && position.column() <= 7 && position.row() <= 7;
     }
 
-    private Direction getOtherFiguresLastMove(Position from){
+    public Direction getOtherFiguresLastMove(Position from){
         if (from.equals(figure1.getPosition())){
             return figure2.getLastMove();
         } else {
@@ -94,7 +94,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         }
     }
 
-    private List<Direction> getLegalDirections(Position from){
+    public List<Direction> getLegalDirections(Position from){
         Direction otherFiguresLastMove = getOtherFiguresLastMove(from);
 
         if (otherFiguresLastMove.equals(Direction.UP) || otherFiguresLastMove.equals(Direction.DOWN)) {
@@ -120,7 +120,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         return false;
     }
 
-    private Direction getDirectionFromPositionChange(Position from, Position to) {
+    public Direction getDirectionFromPositionChange(Position from, Position to) {
         if (from.column()-to.column() == 0){
             if (from.row()-to.row() == 0) {
                 return Direction.NONE;
