@@ -1,5 +1,7 @@
 package boardgame.model;
 
+import java.util.List;
+
 /**
  * Enum representing directions with corresponding row and column offsets.
  * Each direction specifies how the row and column indices change when moving in that direction.
@@ -38,5 +40,9 @@ public enum Direction {
      */
     public int getColumn() {
         return column;
+    }
+
+    public static List<Direction> getMovableDirections() {
+        return List.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
     }
 }

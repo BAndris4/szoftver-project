@@ -32,25 +32,21 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         return figure1.getPosition().equals(new Position(7,7)) && figure2.getPosition().equals(new Position(7,7));
     }
 
-    public static List<Direction> getMovableDirections() {
-        return List.of(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
-    }
-
     @Override
     public Set<TwoPhaseMove<Position>> getLegalMoves() {
         var moves = new HashSet<TwoPhaseMove<Position>>();
 
         var currentPosition = figure1.getPosition();
-        for (Direction direction : getMovableDirections()) {
-            var move = new TwoPhaseMove<Position>(currentPosition, getNewPosition(currentPosition, direction, table[currentPosition.row()][currentPosition.column()]));
+        for (Direction direction : Direction.getMovableDirections()) {
+            var move = new TwoPhaseMove<Position>(currentPosition, Position.getNewPosition(currentPosition, direction, table[currentPosition.row()][currentPosition.column()]));
             if (isLegalMove(move)) {
                 moves.add(move);
             }
         }
 
         currentPosition = figure2.getPosition();
-        for (Direction direction : getMovableDirections()) {
-            var move = new TwoPhaseMove<Position>(currentPosition, getNewPosition(currentPosition, direction, table[currentPosition.row()][currentPosition.column()]));
+        for (Direction direction : Direction.getMovableDirections()) {
+            var move = new TwoPhaseMove<Position>(currentPosition, Position.getNewPosition(currentPosition, direction, table[currentPosition.row()][currentPosition.column()]));
             if (isLegalMove(move)) {
                 moves.add(move);
             }
@@ -76,11 +72,6 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
                 (figure2.getPosition().equals(position) && figure2.getLastMove().equals(Direction.NONE));
     }
 
-    public Position getNewPosition(Position from, Direction direction, int steps) {
-        int newRow = from.row() + direction.getRow() * steps;
-        int newColumn = from.column() + direction.getColumn() * steps;
-        return new Position(newRow, newColumn);
-    }
 
     public boolean isValidPosition(Position position){
         return position.row() >= 0 && position.column() >= 0 && position.column() <= 7 && position.row() <= 7;
@@ -112,7 +103,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
             var from = positionTwoPhaseMove.from();
             var legalDirections = getLegalDirections(from);
             for (Direction direction : legalDirections) {
-                if (getNewPosition(from, direction, table[from.row()][from.column()]).equals(positionTwoPhaseMove.to())){
+                if (Position.getNewPosition(from, direction, table[from.row()][from.column()]).equals(positionTwoPhaseMove.to())){
                     return true;
                 }
             }
@@ -120,30 +111,15 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         return false;
     }
 
-    public Direction getDirectionFromPositionChange(Position from, Position to) {
-        if (from.column()-to.column() == 0){
-            if (from.row()-to.row() == 0) {
-                return Direction.NONE;
-            } else if (from.row()-to.row() > 0){
-                return Direction.UP;
-            } else {
-                return Direction.DOWN;
-            }
-        } else if (from.column()-to.column() > 0) {
-            return Direction.LEFT;
-        } else {
-            return Direction.RIGHT;
-        }
-    }
 
     @Override
     public void makeMove(TwoPhaseMove<Position> positionTwoPhaseMove) {
         if (positionTwoPhaseMove.from().equals(figure1.getPosition())){
             figure1.setPosition(positionTwoPhaseMove.to());
-            figure1.setLastMove(getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
+            figure1.setLastMove(Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
         } else {
             figure2.setPosition(positionTwoPhaseMove.to());
-            figure2.setLastMove(getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
+            figure2.setLastMove(Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
         }
         if (!(figure1.getLastMove().equals(Direction.NONE)) && !(figure2.getLastMove().equals(Direction.NONE))){
             figure1.setLastMove(Direction.NONE);
