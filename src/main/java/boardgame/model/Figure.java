@@ -22,6 +22,17 @@ public class Figure {
     }
 
     /**
+     * Creates a new figure with the specified position and last movement direction.
+     *
+     * @param position the initial position of the figure
+     * @param lastMove the last move direction of the figure
+     */
+    public Figure(Position position, Direction lastMove) {
+        this.position = position;
+        this.lastMove = lastMove;
+    }
+
+    /**
      * Returns the current position of the figure.
      *
      * @return the position
