@@ -1,6 +1,7 @@
 package boardgame.model;
 
 import puzzle.TwoPhaseMoveState;
+import puzzle.solver.BreadthFirstSearch;
 
 import java.util.HashSet;
 import java.util.List;
@@ -247,5 +248,10 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         sb.append(", figure2=").append(figure2);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        new BreadthFirstSearch<TwoPhaseMove<Position>>()
+                .solveAndPrintSolution(new BoardGameState());
     }
 }
