@@ -141,8 +141,8 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      * Returns a list of legal movement directions for the figure at {@code from} position.
      * The allowed directions depend on the other figure's last move:
      * <ul>
-     *   <li>If the other figure moved vertically (UP/DOWN), the current figure can move only horizontally (LEFT/RIGHT).</li>
-     *   <li>If the other figure moved horizontally (LEFT/RIGHT), the current figure can move only vertically (UP/DOWN).</li>
+     *   <li>If the other figure moved vertically ({@link Direction#UP}/{@link Direction#DOWN}), the current figure can move only horizontally ({@link Direction#LEFT}/{@link Direction#RIGHT}).</li>
+     *   <li>If the other figure moved horizontally ({@link Direction#LEFT}/{@link Direction#RIGHT}), the current figure can move only vertically ({@link Direction#UP}/{@link Direction#DOWN}).</li>
      *   <li>If the other figure has not moved yet ({@link Direction#NONE}), all directions are allowed.</li>
      * </ul>
      *

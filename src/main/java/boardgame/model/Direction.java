@@ -7,10 +7,25 @@ import java.util.List;
  * Each direction specifies how the row and column indices change when moving in that direction.
  */
 public enum Direction {
+    /**
+     * Moves one row up.
+     */
     UP(-1,0),
+    /**
+     * Moves one column right.
+     */
     RIGHT(0,1),
+    /**
+     * Moves one column left.
+     */
     LEFT(0, -1),
+    /**
+     * Moves one row down.
+     */
     DOWN(1, 0),
+    /**
+     * No movement.
+     */
     NONE(0,0);
 
     private final int row;
