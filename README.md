@@ -1,7 +1,24 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/UkdUJk5L)
-# TODO: the name of your project
+# Two-Figure Board Puzzle (1.11. Task)
 
-TODO: a detailed description of your project (must contain at least the original description of the assignment)
+## Task description
+
+You are given a game board consisting of 8 × 8 numbered cells. Two figures are initially placed in the top-left corner, and both must move simultaneously in each step according to the following rules:
+
+- The figures can move vertically and horizontally.
+- A figure must move exactly as many cells as the number in its current position indicates.
+- If one figure moves vertically, the other must move horizontally.
+
+The goal is to move both figures simultaneously to the target cell located in the bottom-right corner. If only one figure reaches the target cell in a given move, or if either figure steps onto a cell with a 0 (from which it cannot move further), then no further moves can be made from that state.
+
+| 3 | 5 | 0 | 2 | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|---|---|---|
+| 1 | 2 | 2 | 1 | 4 | 5 | 2 | 0 |
+| 2 | 0 | 1 | 3 | 4 | 3 | 2 | 1 |
+| 4 | 4 | 0 | 2 | 3 | 0 | 5 | 2 |
+| 4 | 1 | 0 | 3 | 3 | 2 | 4 | 3 |
+| 1 | 0 | 2 | 2 | 3 | 0 | 1 | 0 |
+| 4 | 0 | 2 | 2 | 1 | 4 | 0 | 1 |
+| 2 | 2 | 0 | 4 | 3 | 5 | 4 | * |
 
 ## Building from Source
 
@@ -29,3 +46,20 @@ You need a `settings.xml` file with the following content to store your PAT:
 ```
 
 The `settings.xml` file must be placed in the `.m2` directory in your home directory, i.e., in the same directory that stores your local Maven repository.
+
+## Solution
+
+- FIGURE1: RIGHT
+- FIGURE2: DOWN
+- FIGURE2: RIGHT
+- FIGURE1: DOWN
+- FIGURE1: LEFT
+- FIGURE2: DOWN
+- FIGURE1: DOWN
+- FIGURE2: LEFT
+- FIGURE2: UP
+- FIGURE1: RIGHT
+- FIGURE1: RIGHT
+- FIGURE2: DOWN
+- FIGURE2: RIGHT
+- FIGURE1: DOWN
