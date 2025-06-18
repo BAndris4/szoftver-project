@@ -34,11 +34,32 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
     private Figure figure2;
 
     /**
-     * Initializes a new {@code BoardGameState} with two figures starting at default positions.
+     * Initializes a new {@code BoardGameState} with the given figures.
+     *
+     * @param figure1 the first figure of the game
+     * @param figure2 the second figure of the game
      */
-    public BoardGameState() {
-        this.figure1 = new Figure();
-        this.figure2 = new Figure();
+    public BoardGameState(Figure figure1, Figure figure2) {
+        this.figure1 = figure1;
+        this.figure2 = figure2;
+    }
+
+    /**
+     * Returns the first figure of the game.
+     *
+     * @return the first {@link Figure}
+     */
+    public Figure getFigure1() {
+        return figure1;
+    }
+
+    /**
+     * Returns the second figure of the game.
+     *
+     * @return the second {@link Figure}
+     */
+    public Figure getFigure2() {
+        return figure2;
     }
 
     /**
@@ -88,11 +109,9 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public BoardGameState clone() {
-        BoardGameState copy = new BoardGameState();
-        copy.figure1 = new Figure();
+        BoardGameState copy = new BoardGameState(new Figure(), new Figure());
         copy.figure1.setPosition(this.figure1.getPosition());
         copy.figure1.setLastMove(this.figure1.getLastMove());
-        copy.figure2 = new Figure();
         copy.figure2.setPosition(this.figure2.getPosition());
         copy.figure2.setLastMove(this.figure2.getLastMove());
         return copy;
@@ -112,14 +131,14 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
                 (figure2.getPosition().equals(position) && figure2.getLastMove().equals(Direction.NONE));
     }
 
-
     /**
      * Checks whether the specified {@link Position} is within the boundaries of the board.
+     * This method is static and can be used independently of any instance.
      *
      * @param position the {@link Position} to validate
      * @return {@code true} if the position is inside the 8x8 board, {@code false} otherwise
      */
-    public boolean isValidPosition(Position position){
+    public static boolean isValidPosition(Position position){
         return position.row() >= 0 && position.column() >= 0 && position.column() <= 7 && position.row() <= 7;
     }
 
@@ -128,12 +147,15 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      *
      * @param from the current figure's {@link Position}
      * @return the {@link Direction} of the other figure's last move
+     * @throws IllegalArgumentException if {@code from} does not match either figure's current position
      */
-    public Direction getOtherFiguresLastMove(Position from){
+    public Direction getOtherFiguresLastMove(Position from) {
         if (from.equals(figure1.getPosition())){
             return figure2.getLastMove();
-        } else {
+        } else if (from.equals(figure2.getPosition())) {
             return figure1.getLastMove();
+        } else {
+            throw new IllegalArgumentException("Invalid position value!");
         }
     }
 
@@ -157,7 +179,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
         } else if (otherFiguresLastMove.equals(Direction.RIGHT) || otherFiguresLastMove.equals(Direction.LEFT)) {
             return List.of(Direction.UP, Direction.DOWN);
         } else {
-            return List.of(Direction.UP, Direction.RIGHT, Direction.DOWN, Direction.LEFT);
+            return Direction.getMovableDirections();
         }
     }
 
@@ -174,7 +196,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public boolean isLegalMove(TwoPhaseMove<Position> positionTwoPhaseMove) {
-        if (isValidPosition(positionTwoPhaseMove.to()) && isLegalToMoveFrom(positionTwoPhaseMove.from())){
+        if (isValidPosition(positionTwoPhaseMove.to()) && isLegalToMoveFrom(positionTwoPhaseMove.from()) && !positionTwoPhaseMove.from().equals(positionTwoPhaseMove.to())){
             var from = positionTwoPhaseMove.from();
             var legalDirections = getLegalDirections(from);
             for (Direction direction : legalDirections) {
@@ -252,6 +274,6 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
 
     public static void main(String[] args) {
         new BreadthFirstSearch<TwoPhaseMove<Position>>()
-                .solveAndPrintSolution(new BoardGameState());
+                .solveAndPrintSolution(new BoardGameState(new Figure(), new Figure()));
     }
 }
