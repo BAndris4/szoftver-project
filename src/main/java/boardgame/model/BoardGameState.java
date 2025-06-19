@@ -20,7 +20,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      * The fixed 8x8 game table defining movement steps for each cell.
      * Each number represents how many steps a figure can move from that cell.
      */
-    private static final int[][] table = new int[][]{
+    public static final int[][] table = new int[][]{
             {3, 5, 0, 2, 1, 2, 3, 4},
             {1, 2, 2, 1, 4, 5, 2, 0},
             {2, 0, 1, 3, 4, 3, 2, 1},

@@ -9,10 +9,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="930.0" prefWidth="800.0" spacing="10.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="boardgame.game.GameController">
    <children>
-      <GridPane gridLinesVisible="true" VBox.vgrow="SOMETIMES">
+      <GridPane fx:id="grid" gridLinesVisible="true" prefHeight="600.0" prefWidth="600.0" VBox.vgrow="SOMETIMES">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -37,7 +36,7 @@
       <HBox alignment="CENTER" spacing="10.0">
          <children>
             <Label text="Moves:" />
-            <TextField editable="false" focusTraversable="false" />
+            <TextField fx:id="numberOfMovesField" editable="false" focusTraversable="false" />
          </children>
       </HBox>
    </children>
