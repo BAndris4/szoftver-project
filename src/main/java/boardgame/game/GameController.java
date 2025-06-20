@@ -1,6 +1,7 @@
 package boardgame.game;
 
 import boardgame.model.BoardGameState;
+import boardgame.model.Direction;
 import boardgame.model.Figure;
 import boardgame.model.Position;
 import common.TwoPhaseMoveState;
@@ -111,7 +112,10 @@ public class GameController {
             numberOfMovesField.setText(String.valueOf(moveCount));
             updateBoard();
             handleSolved();
-            if (isOnForbiddenCell(gameState.getFigure1().position()) || isOnForbiddenCell(gameState.getFigure2().position())) {
+            if (isOnForbiddenCell(gameState.getFigure1().position()) ||
+                    isOnForbiddenCell(gameState.getFigure2().position()) ||
+                    (gameState.getFigure1().position().equals(BoardGameState.FINAL_CELL) && gameState.getFigure1().lastMove().equals(Direction.NONE)) ||
+                    (gameState.getFigure2().position().equals(BoardGameState.FINAL_CELL) && gameState.getFigure2().lastMove().equals(Direction.NONE))) {
                 showGameLostAlert();
             }
         } else {
@@ -173,7 +177,7 @@ public class GameController {
         saveGameStateToJson(false);
         final var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Game Over");
-        alert.setContentText("You stepped on zero!");
+        alert.setContentText("You have no more possible moves");
         alert.showAndWait();
         initialize();
     }

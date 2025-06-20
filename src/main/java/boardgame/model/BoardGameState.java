@@ -33,7 +33,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
     private Figure figure1;
     private Figure figure2;
 
-    private static final Position FINAL_CELL = new Position(7,7);
+    public static final Position FINAL_CELL = new Position(7,7);
 
     /**
      * Initializes a new {@code BoardGameState} with the given figures.
