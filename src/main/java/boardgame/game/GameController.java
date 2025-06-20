@@ -97,11 +97,18 @@ public class GameController {
             numberOfMovesField.setText(String.valueOf(moveCount));
             updateBoard();
             handleSolved();
+            if (isOnForbiddenCell(gameState.getFigure1().position()) || isOnForbiddenCell(gameState.getFigure2().position())) {
+                showGameLostAlert();
+            }
         } else {
             Logger.error("Illegal move: {}", move);
         }
         selectedFrom.getStyleClass().remove("selected");
         selectedFrom = null;
+    }
+
+    private boolean isOnForbiddenCell(Position pos) {
+        return BoardGameState.table[pos.row()][pos.column()] == 0;
     }
 
     private void updateBoard() {
@@ -143,6 +150,14 @@ public class GameController {
         final var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Game Over");
         alert.setContentText(String.format("Congratulations, you have solved the puzzle in %d moves!", moveCount));
+        alert.showAndWait();
+        initialize();
+    }
+
+    private void showGameLostAlert() {
+        final var alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Game Over");
+        alert.setContentText("You stepped on zero!");
         alert.showAndWait();
         initialize();
     }
