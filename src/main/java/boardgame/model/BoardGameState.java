@@ -28,10 +28,12 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
             {4, 1, 0, 3, 3, 2, 4, 3},
             {1, 0, 2, 2, 3, 0, 1, 0},
             {4, 0, 2, 2, 1, 4, 0, 1},
-            {2, 2, 0, 4, 3, 5, 4, -1}};
+            {2, 2, 0, 4, 3, 5, 4, 0}};
 
     private Figure figure1;
     private Figure figure2;
+
+    private static final Position FINAL_CELL = new Position(7,7);
 
     /**
      * Initializes a new {@code BoardGameState} with the given figures.
@@ -70,7 +72,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public boolean isSolved() {
-        return figure1.getPosition().equals(new Position(7,7)) && figure2.getPosition().equals(new Position(7,7));
+        return figure1.position().equals(FINAL_CELL) && figure2.position().equals(FINAL_CELL);
     }
 
     /**
@@ -83,7 +85,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
     public Set<TwoPhaseMove<Position>> getLegalMoves() {
         var moves = new HashSet<TwoPhaseMove<Position>>();
 
-        var currentPosition = figure1.getPosition();
+        var currentPosition = figure1.position();
         for (Direction direction : Direction.getMovableDirections()) {
             var move = new TwoPhaseMove<Position>(currentPosition, Position.getNewPosition(currentPosition, direction, table[currentPosition.row()][currentPosition.column()]));
             if (isLegalMove(move)) {
@@ -91,7 +93,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
             }
         }
 
-        currentPosition = figure2.getPosition();
+        currentPosition = figure2.position();
         for (Direction direction : Direction.getMovableDirections()) {
             var move = new TwoPhaseMove<Position>(currentPosition, Position.getNewPosition(currentPosition, direction, table[currentPosition.row()][currentPosition.column()]));
             if (isLegalMove(move)) {
@@ -109,12 +111,14 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public BoardGameState clone() {
-        BoardGameState copy = new BoardGameState(new Figure(), new Figure());
-        copy.figure1.setPosition(this.figure1.getPosition());
-        copy.figure1.setLastMove(this.figure1.getLastMove());
-        copy.figure2.setPosition(this.figure2.getPosition());
-        copy.figure2.setLastMove(this.figure2.getLastMove());
-        return copy;
+        try {
+            BoardGameState copy = (BoardGameState) super.clone();
+            copy.figure1 = this.figure1;
+            copy.figure2 = this.figure2;
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -127,8 +131,8 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public boolean isLegalToMoveFrom(Position position) {
-        return (figure1.getPosition().equals(position) && figure1.getLastMove().equals(Direction.NONE)) ||
-                (figure2.getPosition().equals(position) && figure2.getLastMove().equals(Direction.NONE));
+        return (figure1.position().equals(position) && figure1.lastMove().equals(Direction.NONE)) ||
+                (figure2.position().equals(position) && figure2.lastMove().equals(Direction.NONE));
     }
 
     /**
@@ -150,10 +154,10 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      * @throws IllegalArgumentException if {@code from} does not match either figure's current position
      */
     public Direction getOtherFiguresLastMove(Position from) {
-        if (from.equals(figure1.getPosition())){
-            return figure2.getLastMove();
-        } else if (from.equals(figure2.getPosition())) {
-            return figure1.getLastMove();
+        if (from.equals(figure1.position())){
+            return figure2.lastMove();
+        } else if (from.equals(figure2.position())) {
+            return figure1.lastMove();
         } else {
             throw new IllegalArgumentException("Invalid position value!");
         }
@@ -219,16 +223,14 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public void makeMove(TwoPhaseMove<Position> positionTwoPhaseMove) {
-        if (positionTwoPhaseMove.from().equals(figure1.getPosition())){
-            figure1.setPosition(positionTwoPhaseMove.to());
-            figure1.setLastMove(Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
+        if (positionTwoPhaseMove.from().equals(figure1.position())){
+            figure1 = new Figure(positionTwoPhaseMove.to(), Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
         } else {
-            figure2.setPosition(positionTwoPhaseMove.to());
-            figure2.setLastMove(Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
+            figure2 = new Figure(positionTwoPhaseMove.to(), Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
         }
-        if (!(figure1.getLastMove().equals(Direction.NONE)) && !(figure2.getLastMove().equals(Direction.NONE))){
-            figure1.setLastMove(Direction.NONE);
-            figure2.setLastMove(Direction.NONE);
+        if (!(figure1.lastMove().equals(Direction.NONE)) && !(figure2.lastMove().equals(Direction.NONE))){
+            figure1 = new Figure(figure1.position(), Direction.NONE);
+            figure2 = new Figure(figure2.position(), Direction.NONE);
         }
     }
 
@@ -254,7 +256,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public int hashCode() {
-        return 0;
+        return Objects.hash(figure1, figure2);
     }
 
     /**
