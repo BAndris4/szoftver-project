@@ -24,7 +24,7 @@ public class GameController {
 
     private BoardGameState gameState = null;
 
-    private Position selectedFrom = null;
+    private StackPane selectedFrom = null;
 
     @FXML
     public void initialize() {
@@ -46,6 +46,7 @@ public class GameController {
 
     public StackPane createCell(int row, int column) {
         StackPane cell = new StackPane();
+        cell.getStyleClass().add("cell");
         Label label = new Label(((Integer) BoardGameState.table[row][column]).toString());
         cell.getChildren().add(label);
         cell.setOnMouseClicked(this::handleMouseClick);
@@ -54,32 +55,34 @@ public class GameController {
 
     @FXML
     private void handleMouseClick(MouseEvent event) {
-        Position clickedPosition = getClickedPosition(event);
+        StackPane clickedCell = (StackPane) event.getSource();
         if (selectedFrom == null) {
-            handleFirstClick(clickedPosition);
+            handleFirstClick(clickedCell);
         } else {
-            handleSecondClick(clickedPosition);
+            handleSecondClick(clickedCell);
         }
     }
 
-    private Position getClickedPosition(MouseEvent event) {
-        StackPane cell = (StackPane) event.getSource();
+    private Position getClickedPosition(StackPane cell) {
         int row = GridPane.getRowIndex(cell);
         int column = GridPane.getColumnIndex(cell);
         return new Position(row, column);
     }
 
-    private void handleFirstClick(Position position) {
+    private void handleFirstClick(StackPane cell) {
+        Position position = getClickedPosition(cell);
         if (gameState.isLegalToMoveFrom(position)) {
-            selectedFrom = position;
+            cell.getStyleClass().add("selected");
+            selectedFrom = cell;
             Logger.info("Moving from {}", position);
         } else {
             Logger.warn("Can't move from {}", position);
         }
     }
 
-    private void handleSecondClick(Position position) {
-        TwoPhaseMoveState.TwoPhaseMove<Position> move = new TwoPhaseMoveState.TwoPhaseMove<>(selectedFrom, position);
+    private void handleSecondClick(StackPane cell) {
+        Position position = getClickedPosition(cell);
+        TwoPhaseMoveState.TwoPhaseMove<Position> move = new TwoPhaseMoveState.TwoPhaseMove<>(getClickedPosition(selectedFrom), position);
         if (gameState.isLegalMove(move)) {
             gameState.makeMove(move);
             Logger.info("Move made: {}", move);
@@ -87,6 +90,7 @@ public class GameController {
         } else {
             Logger.warn("Illegal move: {}", move);
         }
+        selectedFrom.getStyleClass().remove("selected");
         selectedFrom = null;
     }
 

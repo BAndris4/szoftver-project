@@ -1,0 +1,16 @@
+.cell {
+	-fx-border-style: solid;
+}
+
+.cell:hover {
+	-fx-background-color: lightgray;
+}
+
+.cell.selected {
+	-fx-effect: dropshadow(gaussian, slategray, 2, 1, 0, 0);
+	-fx-background-color: white;
+}
+
+.cell:last-child {
+	-fx-background-color: green;
+}
