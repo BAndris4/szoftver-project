@@ -4,7 +4,9 @@ import boardgame.model.BoardGameState;
 import boardgame.model.Figure;
 import boardgame.model.Position;
 import common.TwoPhaseMoveState;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -22,17 +24,22 @@ public class GameController {
     @FXML
     private TextField numberOfMovesField;
 
+    private int moveCount;
+
     private BoardGameState gameState = null;
 
     private StackPane selectedFrom = null;
 
     @FXML
-    public void initialize() {
+    private void initialize() {
         initializeCells();
         gameState = new BoardGameState(new Figure(), new Figure());
+        moveCount = 0;
+        numberOfMovesField.setText("0");
     }
 
-    public void initializeCells() {
+    private void initializeCells() {
+        grid.getChildren().clear();
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 StackPane cell = createCell(i, j);
@@ -44,7 +51,7 @@ public class GameController {
         Logger.info("Table cells are initialized");
     }
 
-    public StackPane createCell(int row, int column) {
+    private StackPane createCell(int row, int column) {
         StackPane cell = new StackPane();
         cell.getStyleClass().add("cell");
         Label label = new Label(((Integer) BoardGameState.table[row][column]).toString());
@@ -76,7 +83,7 @@ public class GameController {
             selectedFrom = cell;
             Logger.info("Moving from {}", position);
         } else {
-            Logger.warn("Can't move from {}", position);
+            Logger.error("Can't move from {}", position);
         }
     }
 
@@ -86,9 +93,12 @@ public class GameController {
         if (gameState.isLegalMove(move)) {
             gameState.makeMove(move);
             Logger.info("Move made: {}", move);
+            moveCount++;
+            numberOfMovesField.setText(String.valueOf(moveCount));
             updateBoard();
+            handleSolved();
         } else {
-            Logger.warn("Illegal move: {}", move);
+            Logger.error("Illegal move: {}", move);
         }
         selectedFrom.getStyleClass().remove("selected");
         selectedFrom = null;
@@ -121,6 +131,20 @@ public class GameController {
                 }
             }
         }
+    }
+
+    private void handleSolved(){
+        if (gameState.isSolved()){
+            Platform.runLater(this::showSolvedAlert);
+        }
+    }
+
+    private void showSolvedAlert() {
+        final var alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setHeaderText("Game Over");
+        alert.setContentText(String.format("Congratulations, you have solved the puzzle in %d moves!", moveCount));
+        alert.showAndWait();
+        initialize();
     }
 
 
