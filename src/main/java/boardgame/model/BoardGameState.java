@@ -154,6 +154,13 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      * @throws IllegalArgumentException if {@code from} does not match either figure's current position
      */
     public Direction getOtherFiguresLastMove(Position from) {
+        if (from.equals(figure1.position()) && from.equals(figure2.position())){
+            if (figure1.lastMove().equals(Direction.NONE)){
+                return figure2.lastMove();
+            } else {
+                return figure1.lastMove();
+            }
+        }
         if (from.equals(figure1.position())){
             return figure2.lastMove();
         } else if (from.equals(figure2.position())) {
@@ -223,6 +230,13 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public void makeMove(TwoPhaseMove<Position> positionTwoPhaseMove) {
+        if (positionTwoPhaseMove.from().equals(figure1.position()) && positionTwoPhaseMove.from().equals(figure2.position())){
+            if (figure1.lastMove().equals(Direction.NONE)){
+                figure1 = new Figure(positionTwoPhaseMove.to(), Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
+            } else {
+                figure2 = new Figure(positionTwoPhaseMove.to(), Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
+            }
+        } else
         if (positionTwoPhaseMove.from().equals(figure1.position())){
             figure1 = new Figure(positionTwoPhaseMove.to(), Position.getDirectionFromPositionChange(positionTwoPhaseMove.from(), positionTwoPhaseMove.to()));
         } else {
@@ -232,6 +246,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
             figure1 = new Figure(figure1.position(), Direction.NONE);
             figure2 = new Figure(figure2.position(), Direction.NONE);
         }
+        System.out.println(this.toString());
     }
 
     /**

@@ -112,12 +112,7 @@ public class GameController {
             numberOfMovesField.setText(String.valueOf(moveCount));
             updateBoard();
             handleSolved();
-            if (isOnForbiddenCell(gameState.getFigure1().position()) ||
-                    isOnForbiddenCell(gameState.getFigure2().position()) ||
-                    (gameState.getFigure1().position().equals(BoardGameState.FINAL_CELL) && gameState.getFigure1().lastMove().equals(Direction.NONE)) ||
-                    (gameState.getFigure2().position().equals(BoardGameState.FINAL_CELL) && gameState.getFigure2().lastMove().equals(Direction.NONE))) {
-                showGameLostAlert();
-            }
+            handleLostGame();
         } else {
             Logger.error("Illegal move: {}", move);
         }
@@ -161,6 +156,16 @@ public class GameController {
     private void handleSolved(){
         if (gameState.isSolved()){
             Platform.runLater(this::showSolvedAlert);
+        }
+    }
+
+    private void handleLostGame(){
+        if (isOnForbiddenCell(gameState.getFigure1().position()) ||
+                isOnForbiddenCell(gameState.getFigure2().position()) ||
+                ((gameState.getFigure1().position().equals(BoardGameState.FINAL_CELL) && gameState.getFigure1().lastMove().equals(Direction.NONE))
+                        || (gameState.getFigure2().position().equals(BoardGameState.FINAL_CELL) && gameState.getFigure2().lastMove().equals(Direction.NONE)))
+                        && !gameState.isSolved()) {
+            showGameLostAlert();
         }
     }
 
