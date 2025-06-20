@@ -30,7 +30,7 @@
         <jacoco.version>0.8.13</jacoco.version>
         <maven.checkstyle.version>3.6.0</maven.checkstyle.version>
         <maven.surefire.version>3.5.3</maven.surefire.version>
-        <exec.mainClass><!-- TODO: the fully-qualified class name of your class that contains the main() method to launch the application --></exec.mainClass>
+        <exec.mainClass>boardgame.game.Main</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
