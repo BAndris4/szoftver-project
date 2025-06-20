@@ -10,7 +10,7 @@ public class GameApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/game.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/home.fxml"));
         stage.setTitle("JavaFX Board Game");
         Scene scene = new Scene(root);
         stage.setScene(scene);

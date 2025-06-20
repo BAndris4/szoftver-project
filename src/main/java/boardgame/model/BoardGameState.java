@@ -28,7 +28,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
             {4, 1, 0, 3, 3, 2, 4, 3},
             {1, 0, 2, 2, 3, 0, 1, 0},
             {4, 0, 2, 2, 1, 4, 0, 1},
-            {2, 2, 0, 4, 3, 5, 4, 0}};
+            {2, 2, 0, 4, 3, 5, 4, -1}};
 
     private Figure figure1;
     private Figure figure2;

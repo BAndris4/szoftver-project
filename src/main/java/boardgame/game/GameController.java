@@ -18,6 +18,8 @@ import org.tinylog.Logger;
 
 public class GameController {
 
+    public String playerName;
+
     @FXML
     private GridPane grid;
 
@@ -54,7 +56,12 @@ public class GameController {
     private StackPane createCell(int row, int column) {
         StackPane cell = new StackPane();
         cell.getStyleClass().add("cell");
-        Label label = new Label(((Integer) BoardGameState.table[row][column]).toString());
+        Label label;
+        if (row == 7 && column == 7) {
+            label = new Label("*");
+        } else {
+            label = new Label(((Integer) BoardGameState.table[row][column]).toString());
+        }
         cell.getChildren().add(label);
         cell.setOnMouseClicked(this::handleMouseClick);
         return cell;
@@ -149,7 +156,7 @@ public class GameController {
     private void showSolvedAlert() {
         final var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Game Over");
-        alert.setContentText(String.format("Congratulations, you have solved the puzzle in %d moves!", moveCount));
+        alert.setContentText(String.format("Congratulations %s, you have solved the puzzle in %d moves!", playerName, moveCount));
         alert.showAndWait();
         initialize();
     }
