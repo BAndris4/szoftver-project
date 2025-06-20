@@ -15,6 +15,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import org.tinylog.Logger;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameController {
 
@@ -154,6 +161,7 @@ public class GameController {
     }
 
     private void showSolvedAlert() {
+        saveGameStateToJson(true);
         final var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Game Over");
         alert.setContentText(String.format("Congratulations %s, you have solved the puzzle in %d moves!", playerName, moveCount));
@@ -162,6 +170,7 @@ public class GameController {
     }
 
     private void showGameLostAlert() {
+        saveGameStateToJson(false);
         final var alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Game Over");
         alert.setContentText("You stepped on zero!");
@@ -169,7 +178,28 @@ public class GameController {
         initialize();
     }
 
+    private void saveGameStateToJson(boolean solved) {
+        ObjectMapper mapper = new ObjectMapper();
+        GameSaveData saveData = new GameSaveData(playerName, moveCount, solved);
 
+        File file = new File("game_save.json");
+        List<GameSaveData> list;
+
+        try {
+            if (file.exists() && file.length() > 0) {
+                list = mapper.readValue(file, new TypeReference<List<GameSaveData>>() {});
+            } else {
+                list = new ArrayList<>();
+            }
+
+            list.add(saveData);
+
+            mapper.writerWithDefaultPrettyPrinter().writeValue(file, list);
+
+        } catch (IOException e) {
+            Logger.error("Error saving game state: {}", e.getMessage());
+        }
+    }
 }
 
 

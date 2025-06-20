@@ -31,6 +31,7 @@
         <maven.checkstyle.version>3.6.0</maven.checkstyle.version>
         <maven.surefire.version>3.5.3</maven.surefire.version>
         <tinylog.version>2.8.0-M1</tinylog.version>
+        <jackson.version>2.15.2</jackson.version>
         <exec.mainClass>boardgame.game.Main</exec.mainClass>
     </properties>
     <dependencies>
@@ -80,7 +81,23 @@
             <version>${tinylog.version}</version>
             <scope>runtime</scope>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency></dependencies>
     <build>
         <plugins>
             <plugin>

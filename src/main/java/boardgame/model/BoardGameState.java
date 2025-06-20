@@ -72,7 +72,7 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
      */
     @Override
     public boolean isSolved() {
-        return figure1.position().equals(FINAL_CELL) && figure2.position().equals(FINAL_CELL);
+        return (figure1.position().equals(FINAL_CELL) && figure2.position().equals(FINAL_CELL));
     }
 
     /**
