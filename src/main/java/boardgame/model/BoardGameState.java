@@ -246,7 +246,6 @@ public class BoardGameState implements TwoPhaseMoveState<Position> {
             figure1 = new Figure(figure1.position(), Direction.NONE);
             figure2 = new Figure(figure2.position(), Direction.NONE);
         }
-        System.out.println(this.toString());
     }
 
     /**
